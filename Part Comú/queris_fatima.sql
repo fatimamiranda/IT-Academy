@@ -38,17 +38,21 @@ GROUP BY a.City, f.colYear, f.colMonth;
 
 /*5. Les companyies amb més vols cancelats. A més, han d’estar ordenades de forma
 que les companyies amb més cancelacions apareguin les primeres.*/
-SELECT c.description, (f.Cancelled)
+SELECT c.description, sum(f.Cancelled)
 FROM usairlineflights.flights f
 LEFT JOIN usairlineflights.carriers c
 on f.uniquecarrier = c.carriercode
-order by cancelled desc;
-
-select C.Description, sum(F.Cancelled) as Cancelled 
-from usairlineflights.flights F 
-left join usairlineflights.carriers C on  F.UniqueCarrier = C.CarrierCode 
-group by C.description order by sum(F.cancelled) DESC;
+group by c.description
+order by sum(cancelled) desc;
 
 /*6. L’identificador dels 10 avions que més distància han recorregut fent vols.*/
+SELECT f.flightID, f.distance
+FROM usairlineflights.flights f
+order by distance desc limit 10;
+
 /*7. Companyies amb el seu retard promig només d’aquelles les quals els seus vols
 arriben al seu destí amb un retràs promig major de 10 minuts.*/
+select c.description, avg(f.CarrierDelay)
+from usairlineflights.flights f
+left join usairlineflights.carriers c
+on f.UniqueCarrier = c.CarrierCode;
